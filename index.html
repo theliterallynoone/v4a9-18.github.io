@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>V4A9-18</title>
+<meta name="description" content="classified">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- noise / scanline overlay, purely decorative -->
+<div class="grain" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+
+<!-- ============================================================
+     BOOT SEQUENCE
+============================================================= -->
+<section id="boot" class="boot" aria-label="loading">
+  <div class="boot-inner">
+    <pre id="bootLog" class="boot-log"></pre>
+    <div class="boot-bar-track" aria-hidden="true">
+      <div id="bootBar" class="boot-bar"></div>
+    </div>
+  </div>
+  <button id="skipBoot" class="skip-btn" type="button">skip</button>
+</section>
+
+<!-- ============================================================
+     LANDING GATE
+============================================================= -->
+<section id="gate" class="gate" hidden>
+  <div class="gate-inner">
+    <p class="gate-kicker">FILE // V4A9-18</p>
+    <h1 class="gate-title">V4A9-18</h1>
+    <p class="gate-subtitle" id="gateSubtitle">an unnecessarily elaborate birthday project</p>
+    <button id="enterBtn" class="enter-btn" type="button">
+      <span class="enter-btn-label">open file</span>
+      <span class="enter-btn-caret">_</span>
+    </button>
+    <p class="gate-footnote">you were not supposed to find this link. since you did — sit down.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     MAIN DOCUMENT
+============================================================= -->
+<div id="site" class="site" hidden>
+
+  <header class="topbar">
+    <div class="topbar-id">V4A9-18</div>
+    <nav class="topnav" id="topnav" aria-label="sections">
+      <a href="#profile">profile</a>
+      <a href="#archive">archive</a>
+      <a href="#incidents">incidents</a>
+      <a href="#analysis">analysis</a>
+      <a href="#memory_core">memory_core</a>
+      <a href="#final">final</a>
+    </nav>
+    <button id="soundToggle" class="sound-toggle" type="button" aria-pressed="false" title="ambient sound">
+      <span class="sound-dot"></span> sound: off
+    </button>
+  </header>
+
+  <!-- ---------------- PROFILE ---------------- -->
+  <section id="profile" class="section">
+    <p class="section-label">01 // PROFILE</p>
+    <h2 class="section-title" id="profileName">SUBJECT PROFILE</h2>
+
+    <div class="profile-grid">
+      <div class="profile-field">
+        <span class="field-key">designation</span>
+        <span class="field-val" id="pf-name">—</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-key">alias(es)</span>
+        <span class="field-val" id="pf-alias">—</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-key">age (as of file date)</span>
+        <span class="field-val" id="pf-age">18</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-key">status</span>
+        <span class="field-val" id="pf-status">—</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-key">threat level</span>
+        <span class="field-val" id="pf-threat">—</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-key">clearance</span>
+        <span class="field-val">absolutely none of your business</span>
+      </div>
+    </div>
+
+    <p class="profile-note" id="pf-note">
+      note field — replace with a short, dry description of him.
+    </p>
+  </section>
+
+  <!-- ---------------- ARCHIVE ---------------- -->
+  <section id="archive" class="section">
+    <p class="section-label">02 // ARCHIVE</p>
+    <h2 class="section-title">MEMORY ARCHIVE</h2>
+    <p class="section-intro">recovered entries. click a record to expand.</p>
+
+    <div id="archiveList" class="archive-list"><!-- injected by script.js --></div>
+  </section>
+
+  <!-- ---------------- INCIDENTS ---------------- -->
+  <section id="incidents" class="section">
+    <p class="section-label">03 // INCIDENTS</p>
+    <h2 class="section-title">KNOWN INCIDENT LOG</h2>
+    <p class="section-intro">a non-exhaustive record. filed under "questionable decisions."</p>
+
+    <div id="incidentList" class="incident-list"><!-- injected by script.js --></div>
+  </section>
+
+  <!-- ---------------- ANALYSIS ---------------- -->
+  <section id="analysis" class="section">
+    <p class="section-label">04 // ANALYSIS</p>
+    <h2 class="section-title">SUBJECT ANALYSIS</h2>
+    <p class="section-intro">automated diagnostic. results are scientifically meaningless.</p>
+
+    <div id="statList" class="stat-list"><!-- injected by script.js --></div>
+
+    <div class="compat-box">
+      <p class="compat-label">COMPATIBILITY SCAN — REQUESTER VS. SUBJECT</p>
+      <div class="compat-readout" id="compatReadout">CALCULATING<span class="dots"></span></div>
+      <p class="compat-verdict" id="compatVerdict"></p>
+    </div>
+  </section>
+
+  <!-- ---------------- MEMORY CORE (timeline) ---------------- -->
+  <section id="memory_core" class="section">
+    <p class="section-label">05 // MEMORY_CORE</p>
+    <h2 class="section-title">MEMORY CORE</h2>
+    <p class="section-intro">core timeline. handle with care.</p>
+
+    <div id="timeline" class="timeline"><!-- injected by script.js --></div>
+  </section>
+
+  <!-- ---------------- TERMINAL (easter egg entry point) ---------------- -->
+  <section id="terminal" class="section terminal-section">
+    <p class="section-label">06 // SYS</p>
+    <h2 class="section-title">LOCAL TERMINAL</h2>
+    <p class="section-intro">type <code>help</code> if you're bored.</p>
+
+    <div class="terminal-window">
+      <div id="termOutput" class="term-output"></div>
+      <div class="term-input-row">
+        <span class="term-prompt">v4a9&gt;</span>
+        <input id="termInput" class="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="terminal input">
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------- FINAL MESSAGE ---------------- -->
+  <section id="final" class="section final-section">
+    <p class="section-label">07 // FINAL_MESSAGE</p>
+    <div class="final-message" id="finalMessage">
+      [INSERT MY ACTUAL MESSAGE HERE]
+    </div>
+    <p class="final-sign" id="finalSign">— end of file —</p>
+  </section>
+
+  <footer class="footer">
+    <p>V4A9-18 // file closed // decrypted locally, no data leaves this device</p>
+  </footer>
+</div>
+
+<!-- ============================================================
+     EASTER EGG OVERLAY (hidden, unlocked via terminal command)
+============================================================= -->
+<div id="easterEgg" class="easter-egg" hidden>
+  <div class="easter-egg-inner">
+    <p class="ee-label" id="eeLabel">RESTRICTED FILE — UNLOCKED</p>
+    <div class="ee-body" id="eeBody">[ customize this in script.js → EASTER_EGG ]</div>
+    <button id="eeClose" class="ee-close" type="button">close</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
