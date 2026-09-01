@@ -30,6 +30,39 @@
   <button id="skipBoot" class="skip-btn" type="button">skip</button>
 </section>
 
+<!--
+  FAILSAFE — independent of script.js, so it works even if the main
+  script fails to load or throws an error. If the boot sequence hasn't
+  finished within a few seconds, this reveals a manual way in.
+  Nothing to edit here.
+-->
+<script>
+  (function () {
+    window.__v4a9Ready = false;
+    window.addEventListener("error", function (e) {
+      console.error("V4A9 runtime error:", e.message, "at", e.filename + ":" + e.lineno);
+    });
+    setTimeout(function () {
+      if (window.__v4a9Ready) return;
+      var boot = document.getElementById("boot");
+      if (!boot || boot.hidden) return;
+      var inner = boot.querySelector(".boot-inner");
+      var note = document.createElement("p");
+      note.style.cssText = "margin-top:24px;font-family:monospace;font-size:12px;color:#8A8D92;";
+      note.innerHTML = 'something stalled loading the main script — <a href="#" id="failsafeLink" style="color:#E8A33D;text-decoration:underline;">click here to continue anyway</a>';
+      inner.appendChild(note);
+      document.getElementById("failsafeLink").addEventListener("click", function (ev) {
+        ev.preventDefault();
+        boot.hidden = true;
+        var gate = document.getElementById("gate");
+        var site = document.getElementById("site");
+        if (gate) gate.hidden = false;
+        else if (site) site.hidden = false;
+      });
+    }, 3500);
+  })();
+</script>
+
 <!-- ============================================================
      LANDING GATE
 ============================================================= -->
