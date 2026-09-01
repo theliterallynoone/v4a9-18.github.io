@@ -186,6 +186,7 @@ function runBoot() {
 // ============================================================================
 
 function showGate() {
+  window.__v4a9Ready = true; // tell the inline failsafe script we're fine, no need to intervene
   const gate = document.getElementById("gate");
   document.getElementById("gateSubtitle").textContent = CONTENT.gate.subtitle;
   document.querySelector(".gate-footnote").textContent = CONTENT.gate.footnote;
@@ -495,5 +496,10 @@ function initSite() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  runBoot();
+  try {
+    runBoot();
+  } catch (err) {
+    console.error("V4A9 failed to start boot sequence:", err);
+    // let the inline failsafe in index.html take over instead of hanging forever
+  }
 });
