@@ -381,9 +381,9 @@ function openEasterEgg() {
 }
 
 function initEasterEggClose() {
-  document.getElementById("eeClose").addEventListener("click", () => {
-    document.getElementById("easterEgg").hidden = true;
-  });
+  const closeBtn = document.getElementById("eeClose");
+  const overlay = document.getElementById("easterEgg");
+  if (closeBtn) closeBtn.addEventListener("click", () => { overlay.hidden = true; });
 }
 
 
@@ -483,16 +483,24 @@ function initSoundToggle() {
 // ============================================================================
 
 function initSite() {
-  renderProfile();
-  renderArchive();
-  renderIncidents();
-  renderStats();
-  renderTimeline();
-  renderFinal();
-  initTerminal();
-  initEasterEggClose();
-  initScrollReveal();
-  initSoundToggle();
+  safeRun(renderProfile);
+  safeRun(renderArchive);
+  safeRun(renderIncidents);
+  safeRun(renderStats);
+  safeRun(renderTimeline);
+  safeRun(renderFinal);
+  safeRun(initTerminal);
+  safeRun(initEasterEggClose);
+  safeRun(initScrollReveal);
+  safeRun(initSoundToggle);
+}
+
+function safeRun(fn) {
+  try {
+    fn();
+  } catch (err) {
+    console.error(`V4A9: ${fn.name} failed:`, err);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
