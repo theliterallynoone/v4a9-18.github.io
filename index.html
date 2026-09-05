@@ -60,6 +60,22 @@
         else if (site) site.hidden = false;
       });
     }, 3500);
+
+    // Independent close mechanism for the easter-egg overlay — works even if
+    // script.js's own close-button listener never got attached. Escape key,
+    // or clicking the dark background outside the card, always closes it.
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        var overlay = document.getElementById("easterEgg");
+        if (overlay && !overlay.hidden) overlay.hidden = true;
+      }
+    });
+    document.addEventListener("click", function (e) {
+      var overlay = document.getElementById("easterEgg");
+      if (overlay && !overlay.hidden && e.target === overlay) {
+        overlay.hidden = true;
+      }
+    });
   })();
 </script>
 
