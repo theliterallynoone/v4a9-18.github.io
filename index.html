@@ -13,13 +13,9 @@
 </head>
 <body>
 
-<!-- noise / scanline overlay, purely decorative -->
 <div class="grain" aria-hidden="true"></div>
 <div class="scanlines" aria-hidden="true"></div>
 
-<!-- ============================================================
-     BOOT SEQUENCE
-============================================================= -->
 <section id="boot" class="boot" aria-label="loading">
   <div class="boot-inner">
     <pre id="bootLog" class="boot-log"></pre>
@@ -30,12 +26,6 @@
   <button id="skipBoot" class="skip-btn" type="button">skip</button>
 </section>
 
-<!--
-  FAILSAFE — independent of script.js, so it works even if the main
-  script fails to load or throws an error. If the boot sequence hasn't
-  finished within a few seconds, this reveals a manual way in.
-  Nothing to edit here.
--->
 <script>
   (function () {
     window.__v4a9Ready = false;
@@ -61,9 +51,6 @@
       });
     }, 3500);
 
-    // Independent close mechanism for the easter-egg overlay — works even if
-    // script.js's own close-button listener never got attached. Escape key,
-    // or clicking the dark background outside the card, always closes it.
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") {
         var overlay = document.getElementById("easterEgg");
@@ -79,9 +66,6 @@
   })();
 </script>
 
-<!-- ============================================================
-     LANDING GATE
-============================================================= -->
 <section id="gate" class="gate" hidden>
   <div class="gate-inner">
     <p class="gate-kicker">FILE // V4A9-18</p>
@@ -95,9 +79,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     MAIN DOCUMENT
-============================================================= -->
 <div id="site" class="site" hidden>
 
   <header class="topbar">
@@ -115,7 +96,6 @@
     </button>
   </header>
 
-  <!-- ---------------- PROFILE ---------------- -->
   <section id="profile" class="section">
     <p class="section-label">01 // PROFILE</p>
     <h2 class="section-title" id="profileName">SUBJECT PROFILE</h2>
@@ -152,31 +132,28 @@
     </p>
   </section>
 
-  <!-- ---------------- ARCHIVE ---------------- -->
   <section id="archive" class="section">
     <p class="section-label">02 // ARCHIVE</p>
     <h2 class="section-title">MEMORY ARCHIVE</h2>
     <p class="section-intro">recovered entries. click a record to expand.</p>
 
-    <div id="archiveList" class="archive-list"><!-- injected by script.js --></div>
+    <div id="archiveList" class="archive-list"></div>
   </section>
 
-  <!-- ---------------- INCIDENTS ---------------- -->
   <section id="incidents" class="section">
     <p class="section-label">03 // INCIDENTS</p>
     <h2 class="section-title">KNOWN INCIDENT LOG</h2>
     <p class="section-intro">a non-exhaustive record. filed under "questionable decisions."</p>
 
-    <div id="incidentList" class="incident-list"><!-- injected by script.js --></div>
+    <div id="incidentList" class="incident-list"></div>
   </section>
 
-  <!-- ---------------- ANALYSIS ---------------- -->
   <section id="analysis" class="section">
     <p class="section-label">04 // ANALYSIS</p>
     <h2 class="section-title">SUBJECT ANALYSIS</h2>
     <p class="section-intro">automated diagnostic. results are scientifically meaningless.</p>
 
-    <div id="statList" class="stat-list"><!-- injected by script.js --></div>
+    <div id="statList" class="stat-list"></div>
 
     <div class="compat-box">
       <p class="compat-label">COMPATIBILITY SCAN — REQUESTER VS. SUBJECT</p>
@@ -185,16 +162,14 @@
     </div>
   </section>
 
-  <!-- ---------------- MEMORY CORE (timeline) ---------------- -->
   <section id="memory_core" class="section">
     <p class="section-label">05 // MEMORY_CORE</p>
     <h2 class="section-title">MEMORY CORE</h2>
     <p class="section-intro">core timeline. handle with care.</p>
 
-    <div id="timeline" class="timeline"><!-- injected by script.js --></div>
+    <div id="timeline" class="timeline"></div>
   </section>
 
-  <!-- ---------------- TERMINAL (easter egg entry point) ---------------- -->
   <section id="terminal" class="section terminal-section">
     <p class="section-label">06 // SYS</p>
     <h2 class="section-title">LOCAL TERMINAL</h2>
@@ -209,7 +184,6 @@
     </div>
   </section>
 
-  <!-- ---------------- FINAL MESSAGE ---------------- -->
   <section id="final" class="section final-section">
     <p class="section-label">07 // FINAL_MESSAGE</p>
     <div class="final-message" id="finalMessage">
@@ -223,9 +197,6 @@
   </footer>
 </div>
 
-<!-- ============================================================
-     EASTER EGG OVERLAY (hidden, unlocked via terminal command)
-============================================================= -->
 <div id="easterEgg" class="easter-egg" hidden>
   <div class="easter-egg-inner">
     <p class="ee-label" id="eeLabel">RESTRICTED FILE — UNLOCKED</p>
