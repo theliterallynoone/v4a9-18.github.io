@@ -1,88 +1,34 @@
-// ============================================================================
-// V4A9-18 — script.js
-// ============================================================================
-//
-// HOW THIS FILE IS ORGANIZED
-// 1. PERSONAL CONTENT — EDIT THIS   <- almost everything you'll ever touch
-// 2. Boot sequence logic
-// 3. Gate / entry logic
-// 4. Renderers (profile, archive, incidents, stats, timeline)
-// 5. Terminal + easter egg
-// 6. Small utilities (scroll reveal, sound toggle)
-//
-// You should only need to edit section 1. Everything below it reads from
-// these objects/arrays automatically.
-// ============================================================================
-
-
-// ============================================================================
-// 1. PERSONAL CONTENT — EDIT THIS
-// ============================================================================
-
 const CONTENT = {
 
-  // ---- shown briefly during the boot sequence -----------------------------
+
   boot: {
-    subjectName: "Adi",              // e.g. his name or nickname
-    statusLine: "STATUS: annoyingly likable", // the "something funny" line
+    subjectName: "Adi",
+    statusLine: "STATUS: annoyingly likable",
   },
 
-  // ---- landing gate ---------------------------------------------------------
   gate: {
     subtitle: "an unnecessarily elaborate birthday project",
-    footnote: "you clearly have too much free time. i respect that.",
+    footnote: "so this is what you do with your precious hours on Earth. Welcome..",
   },
 
-  // ---- /PROFILE ---------------------------------------------------------
-  profile: {
-    heading: "SUBJECT PROFILE",
-    name: "Adi",                 // his name
-    age: "18",
-    status: "Unfortunately a university student",                 // e.g. "active", "impossible to buy gifts for"
+  // ---- celebration screen ---------------------------------------------------
+  celebration: {
+    kicker: "FILE DECRYPTED",
     
-    
-
-      title: "Second entry title",
-      date: "MONTH YYYY",
-      classification: "RESTRICTED — EMBARRASSING",
-      description: "Another memory, screenshot caption, or inside joke here.",
-      image: "",
-    },
-  ],
-
-  // ---- /INCIDENTS — short funny log entries --------------------------------
-  incidents: [
-    {
-      code: "INCIDENT-001",
-      text: "Describe a funny, low-stakes 'incident' here — a bit, a mishap, a running joke.",
-    },
-    {
-      code: "INCIDENT-002",
-      text: "Another one. Keep these short and punchy, one or two sentences.",
-    },
-    {
-      code: "INCIDENT-003",
-      text: "A third, if you've got one. Not required.",
-    },
-  ],
-
-  // ---- /ANALYSIS — fake diagnostic stats -----------------------------------
-  // value is 0-100. Label can be anything you want.
-  stats: [
-    { label: "CHAOS LEVEL", value: 91 },
-    { label: "GOOFINESS", value: 100 },
-    { label: "ABILITY TO MAKE QUESTIONABLE DECISIONS", value: 97 },
-    { label: 'LIKELIHOOD OF SAYING "..." UNPROMPTED', value: 82 },
-    { label: "CHARM (UNEARNED)", value: 88 },
-  ],
-
-  // the fake "compatibility scan" — final line is customizable
-  compat: {
-    percent: 97,
-    verdict: "verdict: statistically inconclusive. proceeding anyway.",
+    name: "",
+    title: "Happy Birthday",
+    subheading: "one more trip around the sun lmao.",
+    celebrateLabel: "celebrate again",
   },
 
-}
+  // ---- envelope ---------------------------------------------------------
+  envelope: {
+    hintClosed: "tap to open",
+    hintOpen: "tap to close",
+    message: "Write your birthday message here.\n\nReplace this whole thing with whatever you want to say.",
+  },
+};
+
 
 // ============================================================================
 // 2. BOOT SEQUENCE
@@ -95,7 +41,7 @@ const BOOT_LINES = [
   { text: `SUBJECT IDENTIFIED: ${CONTENT.boot.subjectName}`, type: "ok" },
   { text: "AGE: 18", type: "ok" },
   { text: CONTENT.boot.statusLine.toUpperCase(), type: "warn" },
-  { text: "ACCESS LEVEL: ABSOLUTELY NONE OF YOUR BUSINESS", type: "warn" },
+  { text: "ACCESS LEVEL: Unemployed behavior", type: "warn" },
   { text: "LOADING FILE...", type: "ok" },
 ];
 
@@ -170,297 +116,102 @@ function enterSite() {
 
 
 // ============================================================================
-// 4. RENDERERS
+// 4. CELEBRATION
 // ============================================================================
 
-function renderProfile() {
-  const p = CONTENT.profile;
-  document.getElementById("profileName").textContent = p.heading;
-  document.getElementById("pf-name").textContent = p.name;
-  document.getElementById("pf-alias").textContent = p.alias;
-  document.getElementById("pf-age").textContent = p.age;
-  document.getElementById("pf-status").textContent = p.status;
-  document.getElementById("pf-threat").textContent = p.threat;
-  document.getElementById("pf-note").textContent = p.note;
+function renderCelebration() {
+  const c = CONTENT.celebration;
+  document.getElementById("celKicker").textContent = c.kicker;
+  document.getElementById("celTitle").textContent = c.name ? `${c.title}, ${c.name}` : c.title;
+  document.getElementById("celSub").textContent = c.subheading;
+  document.getElementById("celebrateBtn").textContent = c.celebrateLabel;
 }
 
-function renderArchive() {
-  const list = document.getElementById("archiveList");
-  list.innerHTML = "";
-  CONTENT.memories.forEach((m, idx) => {
-    const entry = document.createElement("div");
-    entry.className = "archive-entry";
-
-    const num = String(idx + 1).padStart(3, "0");
-
-    entry.innerHTML = `
-      <button class="archive-head" aria-expanded="false">
-        <span class="archive-id">ENTRY #${num}</span>
-        <span class="archive-headtitle">${escapeHTML(m.title)}</span>
-        <span class="archive-date">${escapeHTML(m.date)}</span>
-        <span class="archive-chevron">›</span>
-      </button>
-      <div class="archive-body">
-        <p class="archive-class">CLASSIFICATION: ${escapeHTML(m.classification || "UNMARKED")}</p>
-        <p class="archive-desc">${escapeHTML(m.description)}</p>
-        ${m.image ? `<img class="archive-img" src="${m.image}" alt="${escapeHTML(m.title)}" loading="lazy">` : ""}
-      </div>
-    `;
-
-    const head = entry.querySelector(".archive-head");
-    head.addEventListener("click", () => {
-      const isOpen = entry.classList.toggle("open");
-      head.setAttribute("aria-expanded", String(isOpen));
-    });
-
-    list.appendChild(entry);
-  });
+function initCelebrateButton() {
+  const btn = document.getElementById("celebrateBtn");
+  const layer = document.getElementById("confettiLayer");
+  btn.addEventListener("click", () => burstConfetti(layer));
 }
 
-function renderIncidents() {
-  const list = document.getElementById("incidentList");
-  list.innerHTML = "";
-  CONTENT.incidents.forEach((inc) => {
+const CONFETTI_COLORS = ["#E8A33D", "#F2597F", "#4FD8C4", "#B694F5", "#F5E9DA"];
+
+function burstConfetti(container, count = 140) {
+  if (!container) return;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+
+  for (let i = 0; i < count; i++) {
     const el = document.createElement("div");
-    el.className = "incident";
-    el.innerHTML = `
-      <p class="incident-code">${escapeHTML(inc.code)}</p>
-      <p class="incident-text">${escapeHTML(inc.text)}</p>
-    `;
-    list.appendChild(el);
-  });
-}
+    el.className = "confetti-piece";
 
-function renderStats() {
-  const list = document.getElementById("statList");
-  list.innerHTML = "";
-  CONTENT.stats.forEach((s) => {
-    const row = document.createElement("div");
-    row.className = "stat-row";
-    row.innerHTML = `
-      <span class="stat-name">${escapeHTML(s.label)}</span>
-      <span class="stat-pct">${s.value}%</span>
-      <div class="stat-track"><div class="stat-fill" data-value="${s.value}"></div></div>
-    `;
-    list.appendChild(row);
-  });
+    const color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    const size = 6 + Math.random() * 6;
+    el.style.background = color;
+    el.style.width = `${size}px`;
+    el.style.height = `${size * 1.6}px`;
 
-  document.getElementById("compatVerdict").textContent = CONTENT.compat.verdict;
-}
+    const startX = Math.random() * w;
+    const drift = Math.random() * 300 - 150;
+    const rotateStart = Math.random() * 360;
+    const rotateEnd = rotateStart + (Math.random() * 720 - 360);
+    const duration = 2200 + Math.random() * 1800;
+    const delay = Math.random() * 250;
 
-function renderTimeline() {
-  const wrap = document.getElementById("timeline");
-  wrap.innerHTML = "";
-  CONTENT.timeline.forEach((t) => {
-    const item = document.createElement("div");
-    item.className = "timeline-item";
-    item.innerHTML = `
-      <p class="timeline-date">${escapeHTML(t.date)}</p>
-      <p class="timeline-title">${escapeHTML(t.title)}</p>
-      <p class="timeline-desc">${escapeHTML(t.desc)}</p>
-    `;
-    wrap.appendChild(item);
-  });
-}
+    el.style.left = `${startX}px`;
 
-function renderFinal() {
-  document.getElementById("finalMessage").textContent = CONTENT.finalMessage;
-  document.getElementById("finalSign").textContent = CONTENT.finalSign;
-}
+    container.appendChild(el);
 
-function escapeHTML(str) {
-  const div = document.createElement("div");
-  div.textContent = str == null ? "" : String(str);
-  return div.innerHTML;
-}
+    const anim = el.animate(
+      [
+        { transform: `translate(0px, 0px) rotate(${rotateStart}deg)`, opacity: 1 },
+        { transform: `translate(${drift}px, ${h + 40}px) rotate(${rotateEnd}deg)`, opacity: 1, offset: 0.85 },
+        { transform: `translate(${drift}px, ${h + 40}px) rotate(${rotateEnd}deg)`, opacity: 0 },
+      ],
+      { duration, delay, easing: "cubic-bezier(.2,.6,.4,1)", fill: "forwards" }
+    );
 
-
-// ============================================================================
-// 5. TERMINAL + EASTER EGG
-// ============================================================================
-
-const TERMINAL_HELP = [
-  "available commands:",
-  "  help          — show this list",
-  "  whoami        — ...",
-  "  clear         — clear the screen",
-  "  status        — subject status readout",
-].join("\n");
-
-function initTerminal() {
-  const output = document.getElementById("termOutput");
-  const input = document.getElementById("termInput");
-
-  function print(text, cls) {
-    const line = document.createElement("div");
-    if (cls) line.className = cls;
-    line.textContent = text;
-    output.appendChild(line);
-    output.scrollTop = output.scrollHeight;
-  }
-
-  print("v4a9 local terminal — type 'help' to begin", "term-accent");
-
-  input.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter") return;
-    const raw = input.value.trim();
-    if (!raw) return;
-    print(`v4a9> ${raw}`, "term-echo");
-    input.value = "";
-    handleCommand(raw.toLowerCase());
-  });
-
-  function handleCommand(cmd) {
-    switch (cmd) {
-      case "help":
-        print(TERMINAL_HELP);
-        break;
-      case "clear":
-        output.innerHTML = "";
-        break;
-      case "whoami":
-        print("insufficient clearance to answer that.");
-        break;
-      case "status":
-        print(CONTENT.profile.status || "status unknown.");
-        break;
-      case CONTENT.easterEggCommand.toLowerCase():
-        print("override accepted. decrypting restricted file...", "term-accent");
-        setTimeout(openEasterEgg, 500);
-        break;
-      default:
-        print(`command not recognized: '${cmd}'`);
-    }
+    anim.onfinish = () => el.remove();
   }
 }
 
-function openEasterEgg() {
-  const overlay = document.getElementById("easterEgg");
-  document.getElementById("eeLabel").textContent = CONTENT.easterEgg.label;
-  document.getElementById("eeBody").textContent = CONTENT.easterEgg.body;
-  overlay.hidden = false;
-}
+function initEnvelope() {
+  const btn = document.getElementById("envelopeBtn");
+  const hint = document.getElementById("envelopeHint");
+  const msg = document.getElementById("envelopeMessage");
 
-function initEasterEggClose() {
-  const closeBtn = document.getElementById("eeClose");
-  const overlay = document.getElementById("easterEgg");
-  if (closeBtn) closeBtn.addEventListener("click", () => { overlay.hidden = true; });
-}
-
-
-// ============================================================================
-// 6. UTILITIES — scroll reveal, sound toggle, stat bar animation
-// ============================================================================
-
-function initScrollReveal() {
-  const sections = document.querySelectorAll(".section");
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-
-          // animate stat bars + compat readout once analysis section is visible
-          if (entry.target.id === "analysis") {
-            animateStats();
-            animateCompat();
-          }
-        }
-      });
-    },
-    { threshold: 0.2 }
-  );
-  sections.forEach((s) => io.observe(s));
-}
-
-let statsAnimated = false;
-function animateStats() {
-  if (statsAnimated) return;
-  statsAnimated = true;
-  document.querySelectorAll(".stat-fill").forEach((el, i) => {
-    setTimeout(() => {
-      el.style.width = `${el.dataset.value}%`;
-    }, i * 120);
-  });
-}
-
-let compatAnimated = false;
-function animateCompat() {
-  if (compatAnimated) return;
-  compatAnimated = true;
-  const readout = document.getElementById("compatReadout");
-  const target = CONTENT.compat.percent;
-  let current = 0;
-  const duration = 1400;
-  const start = performance.now();
-
-  function tick(now) {
-    const progress = Math.min(1, (now - start) / duration);
-    current = Math.round(progress * target);
-    readout.textContent = `${current}% MATCH`;
-    if (progress < 1) {
-      requestAnimationFrame(tick);
-    } else {
-      readout.classList.add("glitch");
-    }
-  }
-  requestAnimationFrame(tick);
-}
-
-// simple optional ambient tone, OFF by default, no autoplay
-function initSoundToggle() {
-  const btn = document.getElementById("soundToggle");
-  let ctx = null;
-  let osc = null;
-  let gain = null;
-  let on = false;
+  msg.textContent = CONTENT.envelope.message;
+  hint.textContent = CONTENT.envelope.hintClosed;
 
   btn.addEventListener("click", () => {
-    on = !on;
-    btn.setAttribute("aria-pressed", String(on));
-    btn.querySelector(".sound-toggle") // no-op guard
-    btn.lastChild.textContent = on ? " sound: on" : " sound: off";
-
-    if (on) {
-      if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-      osc = ctx.createOscillator();
-      gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.value = 90;
-      gain.gain.value = 0.0;
-      osc.connect(gain).connect(ctx.destination);
-      osc.start();
-      gain.gain.linearRampToValueAtTime(0.02, ctx.currentTime + 0.6);
-    } else if (osc && gain && ctx) {
-      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
-      osc.stop(ctx.currentTime + 0.35);
-    }
+    const isOpen = btn.classList.toggle("open");
+    btn.setAttribute("aria-expanded", String(isOpen));
+    hint.textContent = isOpen ? CONTENT.envelope.hintOpen : CONTENT.envelope.hintClosed;
   });
 }
 
 
 // ============================================================================
-// INIT
+// 5. INIT
 // ============================================================================
 
 function initSite() {
-  safeRun(renderProfile);
-  safeRun(renderArchive);
-  safeRun(renderIncidents);
-  safeRun(renderStats);
-  safeRun(renderTimeline);
-  safeRun(renderFinal);
-  safeRun(initTerminal);
-  safeRun(initEasterEggClose);
-  safeRun(initScrollReveal);
-  safeRun(initSoundToggle);
+  safeRun(renderCelebration);
+  safeRun(initCelebrateButton);
+  safeRun(initEnvelope);
+
+  // greet with one automatic burst on arrival — the single orchestrated
+  // moment. Every burst after this is user-triggered via the button.
+  setTimeout(() => {
+    const layer = document.getElementById("confettiLayer");
+    safeRun(() => burstConfetti(layer));
+  }, 350);
 }
 
 function safeRun(fn) {
   try {
     fn();
   } catch (err) {
-    console.error(`V4A9: ${fn.name} failed:`, err);
+    console.error(`V4A9: ${fn.name || "anonymous"} failed:`, err);
   }
 }
 
