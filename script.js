@@ -23,41 +23,25 @@ const CONTENT = {
 
   // ---- shown briefly during the boot sequence -----------------------------
   boot: {
-    subjectName: "SUBJECT",              // e.g. his name or nickname
+    subjectName: "Adi",              // e.g. his name or nickname
     statusLine: "STATUS: annoyingly likable", // the "something funny" line
   },
 
   // ---- landing gate ---------------------------------------------------------
   gate: {
     subtitle: "an unnecessarily elaborate birthday project",
-    footnote: "you were not supposed to find this link. since you did — sit down.",
+    footnote: "you clearly have too much free time. i respect that.",
   },
 
   // ---- /PROFILE ---------------------------------------------------------
   profile: {
     heading: "SUBJECT PROFILE",
-    name: "—",                 // his name
-    alias: "—",                 // nickname(s), comma separated
+    name: "Adi",                 // his name
     age: "18",
-    status: "—",                 // e.g. "active", "impossible to buy gifts for"
-    threat: "—",                 // a funny "threat level"
-    note: "Replace this with two or three dry, specific sentences about him — " +
-          "something only you'd know how to describe. Avoid generic compliments; " +
-          "be weirdly specific instead.",
-  },
+    status: "Unfortunately a university student",                 // e.g. "active", "impossible to buy gifts for"
+    
+    
 
-  // ---- /ARCHIVE — memory entries -----------------------------------------
-  // Add/remove as many as you like. `image` can be a relative path
-  // (e.g. "images/photo1.jpg") or left empty to omit the image.
-  memories: [
-    {
-      title: "Entry title here",
-      date: "MONTH YYYY",
-      classification: "UNCLASSIFIED — SENTIMENTAL",
-      description: "A sentence or two about what happened and why it mattered.",
-      image: "", // "images/example.jpg"
-    },
-    {
       title: "Second entry title",
       date: "MONTH YYYY",
       classification: "RESTRICTED — EMBARRASSING",
@@ -98,30 +82,7 @@ const CONTENT = {
     verdict: "verdict: statistically inconclusive. proceeding anyway.",
   },
 
-  // ---- /MEMORY_CORE — timeline ----------------------------------------------
-  timeline: [
-    { date: "DAY ONE", title: "How this started", desc: "Short description of the beginning." },
-    { date: "SOMEWHERE IN THE MIDDLE", title: "A turning point", desc: "Describe a moment that mattered." },
-    { date: "NOW", title: "Where things are", desc: "A line about the present — can be funny, can be honest." },
-  ],
-
-  // ---- /FINAL_MESSAGE ---------------------------------------------------
-  finalMessage: "[INSERT MY ACTUAL MESSAGE HERE]",
-  finalSign: "— end of file —",
-
-  // ---- terminal easter egg -----------------------------------------------
-  // Typing this command in the on-page terminal (section 06) unlocks the
-  // overlay below. Keep it something only he'd think to try, or tell him
-  // the command in person.
-  easterEggCommand: "override",
-  easterEgg: {
-    label: "RESTRICTED FILE — UNLOCKED",
-    body: "Put whatever you want here: a private joke, a photo reference, " +
-          "a coupon for something, coordinates, a question. This only shows " +
-          "up if the command above is typed into the terminal.",
-  },
-};
-
+}
 
 // ============================================================================
 // 2. BOOT SEQUENCE
