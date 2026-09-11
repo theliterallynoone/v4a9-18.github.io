@@ -218,6 +218,8 @@ button { font-family: inherit; cursor: pointer; }
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  position: relative;
+  z-index: 160; /* stay above the backdrop so tapping the envelope again still closes it */
 }
 
 .envelope {
@@ -295,30 +297,46 @@ button { font-family: inherit; cursor: pointer; }
   transition: opacity 0.3s ease;
 }
 
+/* The letter pops out as its own centered card, independent of the tiny
+   envelope's size — this way it works for a one-line note or a much
+   longer message without overflowing or drifting off-screen. */
+.envelope-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 7, 8, 0.72);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 150;
+}
+.envelope-backdrop.open { opacity: 1; pointer-events: auto; }
+
 .envelope-letter {
-  position: absolute;
+  position: fixed;
+  top: 50%;
   left: 50%;
-  top: 18px;
-  width: 84%;
-  min-height: 76%;
+  width: min(440px, 88vw);
+  max-height: 72vh;
+  overflow-y: auto;
   background: var(--paper);
   color: var(--ink);
-  border-radius: 2px;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.45);
-  padding: 16px 16px;
-  transform: translate(-50%, 0) scale(0.92);
+  border-radius: 4px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  padding: 28px 26px;
+  transform: translate(-50%, -46%) scale(0.94);
   opacity: 0;
-  z-index: 1;
-  transition: transform 0.6s cubic-bezier(.2,.7,.3,1), opacity 0.4s ease, z-index 0s 0.6s;
-  overflow: auto;
+  pointer-events: none;
+  z-index: 200;
   text-align: left;
+  transition: transform 0.4s cubic-bezier(.2,.7,.3,1), opacity 0.35s ease;
 }
 
 .envelope-letter p {
   margin: 0;
   font-family: var(--sans);
-  font-size: 0.85rem;
-  line-height: 1.55;
+  font-size: 0.92rem;
+  line-height: 1.6;
   white-space: pre-wrap;
 }
 
@@ -329,10 +347,9 @@ button { font-family: inherit; cursor: pointer; }
 }
 .envelope.open .envelope-seal { opacity: 0; }
 .envelope.open .envelope-letter {
-  transform: translate(-50%, -58%) scale(1);
+  transform: translate(-50%, -50%) scale(1);
   opacity: 1;
-  z-index: 3;
-  transition: transform 0.6s cubic-bezier(.2,.7,.3,1), opacity 0.4s ease, z-index 0s 0s;
+  pointer-events: auto;
 }
 
 .envelope-hint {
