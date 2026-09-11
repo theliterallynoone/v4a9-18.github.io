@@ -25,7 +25,7 @@ const CONTENT = {
   envelope: {
     hintClosed: "tap to open",
     hintOpen: "tap to close",
-    message: "So i guess ill just keep this short and simple and sarcastic, because i can never keep it sweet haha. I really wanted to use AI for this message as well, but then i realised my writing skills are on the verge of death. Anyway, i know things have been really weird between us (when were they not honestly speaking), and whatever happens or happened, you're probably the only person on earth i would actually love to take some advice or share things to, even if your response might be '3 din ka suspension nai chutti hoti h beti'.\n Yeah um Happy birthday one of my favourite human beings on this plant.\n(Also yes, i kinda vibe coded this thing but who cares right? If it makes you feel any better claude was annoying as fuck.)",
+    message: "So i guess ill just keep this short and simple and sarcastic, because i can never keep it sweet haha. I really wanted to use AI for this message as well, but then i realised my writing skills are on the verge of death. Anyway, i know things have been really weird between us (when were they not honestly speaking), and whatever happens or happened, you're probably the only person on earth i would actually love to take some advice or share things to, even if your response might be '3 din ka suspension nai chutti hoti h beti'.\n Yeah um Happy birthday one of my favourite human beings on this planet.\n(Also yes, i kinda vibe coded this thing but who cares right? If it makes you feel any better claude was annoying as fuck.)\n Happy 18th <3",
   },
 };
 
@@ -178,14 +178,22 @@ function initEnvelope() {
   const btn = document.getElementById("envelopeBtn");
   const hint = document.getElementById("envelopeHint");
   const msg = document.getElementById("envelopeMessage");
+  const backdrop = document.getElementById("envelopeBackdrop");
 
   msg.textContent = CONTENT.envelope.message;
   hint.textContent = CONTENT.envelope.hintClosed;
 
-  btn.addEventListener("click", () => {
-    const isOpen = btn.classList.toggle("open");
+  function setOpen(isOpen) {
+    btn.classList.toggle("open", isOpen);
+    backdrop.classList.toggle("open", isOpen);
     btn.setAttribute("aria-expanded", String(isOpen));
     hint.textContent = isOpen ? CONTENT.envelope.hintOpen : CONTENT.envelope.hintClosed;
+  }
+
+  btn.addEventListener("click", () => setOpen(!btn.classList.contains("open")));
+  backdrop.addEventListener("click", () => setOpen(false));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && btn.classList.contains("open")) setOpen(false);
   });
 }
 
